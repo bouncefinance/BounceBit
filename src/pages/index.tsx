@@ -9,31 +9,31 @@ import Medium from '@/assets/Medium'
 import Twitter from '@/assets/Twitter'
 import { Bitcoin, Bounce, Lets, Slogan, Slogan2, Year } from '@/assets/Text'
 import Ball, { BallBase } from '@/assets/Ball'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import gsap, { Power2 } from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const inter = Inter({ subsets: ['latin'] })
-
+let tl: gsap.core.Timeline | null = null
 export default function Home() {
-  useEffect(() => {
+  const animation = useCallback(() => {
     const bound = document.querySelector('main')!.getBoundingClientRect()
+    if (tl) {
+      tl.revert()
+      tl.clear()
+      window.scrollTo(0, 0)
+    }
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.scroll',
-        start: 'top top',
-        end: 'bottom bottom-=400',
-        scrub: 0.5,
-        snap: {
-          snapTo: 'labels',
-          duration: { min: 1, max: 2 }
-        }
-      }
+    gsap.to('.year', {
+      x: 24 - document.querySelector('.year')!.getBoundingClientRect()!.left,
+      duration: 0.001
     })
-    tl.addLabel('start')
+    gsap.to('.bounce', {
+      x: 24 - document.querySelector('.bounce')!.getBoundingClientRect().left,
+      duration: 0.001
+    })
     gsap.fromTo(
       '.header, .bg',
       {
@@ -45,27 +45,39 @@ export default function Home() {
         ease: Power2.easeInOut
       }
     )
-    tl.addLabel('text')
-    const yearbound = document.querySelector('.year')?.getBoundingClientRect()
-    tl.to(
-      '.year',
-      {
-        x: bound.width / 2 - yearbound!.x - yearbound!.width / 2,
-        ease: Power2.easeOut,
-        duration: 2.5
-      },
-      'text'
-    )
+    tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.scroll',
+        start: 'top top',
+        end: 'bottom bottom-=400',
+        scrub: 0.5,
+        snap: {
+          snapTo: 'labels',
+          duration: { min: 1, max: 2 }
+        },
+        invalidateOnRefresh: true
+      }
+    })
 
-    const bounceBound = document
-      .querySelector('.bounce')
-      ?.getBoundingClientRect()
+    tl.addLabel('text')
+
+    tl.to('.year', { x: 0, ease: Power2.easeOut, duration: 2.5 }, 'text')
+
     tl.to(
       '.bounce',
       {
-        x: bound.width / 2 - bounceBound!.x - bounceBound!.width / 2,
+        x: 0,
         ease: Power2.easeOut,
         duration: 2.5
+        // onUpdate: function (arg) {
+        //   console.log(this)
+        //   document
+        //   const bounceBound = document
+        //     .querySelector('.bounce')
+        //     ?.getBoundingClientRect()
+        //   const all = 24 - bounceBound!.left
+        //   this.x = all * this.progress
+        // }
       },
       'text'
     )
@@ -104,7 +116,9 @@ export default function Home() {
     tl.to(
       '.year',
       {
-        y: headerBound.bottom - yearbound!.top,
+        y:
+          headerBound.bottom -
+          document.querySelector('.year')!.getBoundingClientRect()!.top,
         duration: 1.5,
         ease: Power2.easeInOut
       },
@@ -149,6 +163,15 @@ export default function Home() {
       'ball'
     )
   }, [])
+
+  useEffect(() => {
+    animation()
+    window.addEventListener('resize', animation)
+
+    return () => {
+      window.removeEventListener('resize', animation)
+    }
+  }, [animation])
 
   return (
     <>
