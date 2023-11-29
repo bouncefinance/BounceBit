@@ -9,11 +9,10 @@ import Medium from '@/assets/Medium'
 import Twitter from '@/assets/Twitter'
 import { Bitcoin, Bounce, Lets, Slogan, Slogan2, Year } from '@/assets/Text'
 import Ball, { BallBase } from '@/assets/Ball'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import gsap, { Power2 } from 'gsap'
-import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
+// gsap.registerPlugin(ScrollTrigger)
 
 const inter = Inter({ subsets: ['latin'] })
 let tl: gsap.core.Timeline | null = null
@@ -46,17 +45,17 @@ export default function Home() {
       }
     )
     tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.scroll',
-        start: 'top top',
-        end: 'bottom bottom-=400',
-        scrub: 0.5,
-        snap: {
-          snapTo: 'labels',
-          duration: { min: 1, max: 2 }
-        },
-        invalidateOnRefresh: true
-      }
+      // scrollTrigger: {
+      //   trigger: '.scroll',
+      //   start: 'top top',
+      //   end: 'bottom bottom-=400',
+      //   scrub: 0.5,
+      //   snap: {
+      //     snapTo: 'labels',
+      //     duration: { min: 1, max: 2 }
+      //   },
+      //   invalidateOnRefresh: true
+      // }
     })
 
     tl.addLabel('text')
