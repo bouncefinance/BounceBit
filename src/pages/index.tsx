@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import grid from '@/assets/grid.png'
 import cover from '@/assets/cover.png'
-import Logo from '@/assets/Logo'
+import Logo, { Binance } from '@/assets/Logo'
 import Medium from '@/assets/Medium'
 import Twitter from '@/assets/Twitter'
 import { Bitcoin, Bounce, Lets, Slogan, Slogan2, Year } from '@/assets/Text'
@@ -101,7 +101,7 @@ export default function Home() {
     )
 
     tl.fromTo(
-      '.slogan',
+      '.slogan, .binance',
       {
         y: window.innerHeight + 500
       },
@@ -139,7 +139,7 @@ export default function Home() {
       'shrink'
     )
     tl.to(
-      '.slogan',
+      '.slogan, .binance',
       {
         y: -180,
         duration: 1.5,
@@ -218,6 +218,7 @@ export default function Home() {
           <Slogan
             className={`${styles.slogan} ${styles.sloganDesktop} slogan sloganDesktop`}
           />
+          <Binance className={`${styles.binance} binance`} />
         </div>
         <div className={`${styles.ballWrap} ballwrap`}>
           <Ball className={`${styles.ball} ball`} />
